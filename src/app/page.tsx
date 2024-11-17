@@ -11,6 +11,7 @@ import { ChartKeramaian } from "@/components/dashboard/barcharts-deteksi-keramai
 import DestinationCard from "@/components/maps/card-destination";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { DialogCamera } from "@/components/dashboard/pop-up-camera";
+import { DialogWisata } from "@/components/dashboard/pop-up-submit";
 
 
 // Data destinasi
@@ -447,7 +448,10 @@ export default function Home() {
               Camera
             </button> */}
 
-            <Link href="/deteksi-wisata">
+            <DialogWisata>
+              
+            </DialogWisata>
+            {/* <Link href="/deteksi-wisata">
             <button
               className="text-[#FE7123] rounded-md text-xs ring-offset-background 
   transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring 
@@ -458,7 +462,7 @@ export default function Home() {
             >
               Submit
             </button>
-            </Link>
+            </Link> */}
 
 
           </div>
@@ -471,13 +475,14 @@ export default function Home() {
     Deteksi Keramaian Pengunjung
   </h2>
 
-  <div className="flex justify-center gap-8 w-full">
-    <div className="ml-10 flex-1 w-full lg:w-1/2">
+  <div className="flex justify-center gap-8 w-full px-10">
+    <div className="flex-1 w-full lg:w-1/2">
       <ChartKeramaian />
     </div>
     
-    <div className="mr-10 flex-1 w-full lg:w-1/2">
-      <ScrollArea className="space-y-4">
+    <div className="flex-1 w-full lg:w-1/2">
+    <ScrollArea>
+      <div className="space-y-2">
         {CardDescription.map((destination) => (
           <DestinationCard
             key={destination.rank}
@@ -488,9 +493,11 @@ export default function Home() {
             onClick={() => alert("Coming Soon")}
           />
         ))}
-        <ScrollBar orientation="vertical" className="cursor-pointer" />
-      </ScrollArea>
-    </div>
+      </div>
+      <ScrollBar orientation="vertical" className="cursor-pointer" />
+    </ScrollArea>
+  </div>
+
   </div>
 </section>
 
