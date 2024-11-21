@@ -12,7 +12,7 @@ import DestinationCard from "@/components/maps/card-destination";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { DialogCamera } from "@/components/dashboard/pop-up-camera";
 import { DialogWisata } from "@/components/dashboard/pop-up-submit";
-
+import { VisitorData } from "@/components/dashboard/barcharts-deteksi-keramaian";
 
 // Data destinasi
 const CardDescription = [
@@ -118,6 +118,20 @@ export default function Home() {
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
+
+  // selected place on chart
+
+  // image preview
+   // State mendukung tipe string (URL) atau null
+   const [image, setImage] = useState<string | null>(null);
+
+   // Tipe parameter eksplisit pada event
+   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+     const file = e.target.files?.[0]; // Cek jika file dipilih
+     if (file) {
+       setImage(URL.createObjectURL(file)); // Buat URL pratinjau
+     }
+   };
 
   return (
     <div className="font-poppins text-gray-900 relative">
@@ -427,16 +441,32 @@ export default function Home() {
 
           {/* Tombol tambah destinasi */}
           <div className="flex justify-center items-center">
-            {/* Kontainer untuk memposisikan div ke tengah */}
-            <div className="border-2 border-dashed border-gray-600 bg-white rounded-lg p-6 flex flex-col items-center justify-center cursor-pointer text-gray-500 hover:bg-gray-50 h-[400px] w-[300px] max-w-[300px]">
-              <div className="text-3xl">+</div>
-              <p>Upload Image Wisata</p>
-            </div>
-          </div>
+      {/* Kontainer untuk memposisikan div ke tengah */}
+      <div className="border-2 border-dashed border-gray-600 bg-white rounded-lg p-6 flex flex-col items-center justify-center cursor-pointer text-gray-500 hover:bg-gray-50 h-[400px] w-[300px] max-w-[300px] relative">
+        <input
+          id="picture"
+          type="file"
+          className="opacity-0 absolute inset-0 cursor-pointer"
+          onChange={handleImageChange} // Ketika input berubah, tangani file
+        />
+
+        {/* Jika ada gambar, tampilkan preview */}
+        {image ? (
+          <img
+            src={image}
+            alt="Preview"
+            className="object-contain h-full w-full rounded-lg"
+          />
+        ) : (
+          <>
+            <div className="text-3xl">+</div>
+            <p>Upload Image Wisata</p>
+          </>
+        )}
+      </div>
+    </div>
           <div className="flex justify-center mt-10 gap-8">
-            <DialogCamera>
-              
-            </DialogCamera>
+            <DialogCamera></DialogCamera>
             {/* <button
               className="text-[#FE7123] rounded-md text-xs ring-offset-background 
   transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring 
@@ -448,9 +478,7 @@ export default function Home() {
               Camera
             </button> */}
 
-            <DialogWisata>
-              
-            </DialogWisata>
+            <DialogWisata></DialogWisata>
             {/* <Link href="/deteksi-wisata">
             <button
               className="text-[#FE7123] rounded-md text-xs ring-offset-background 
@@ -463,43 +491,40 @@ export default function Home() {
               Submit
             </button>
             </Link> */}
-
-
           </div>
         </div>
       </section>
 
       {/* Deteksi Keramaian Pengunjung Section */}
-<section className="text-center bg-white py-16" id="destinasi">
-  <h2 className="text-4xl uppercase font-bold mb-6 bg-gradient-to-r from-[#FE7123] to-[#F6D45E] bg-clip-text text-transparent transition-all duration-300 hover:bg-gradient-to-l hover:from-[#F6D45E] hover:to-[#FE7123]">
-    Deteksi Keramaian Pengunjung
-  </h2>
+      <section className="text-center bg-white py-16" id="destinasi">
+        <h2 className="text-4xl uppercase font-bold mb-6  bg-gradient-to-r from-[#FE7123] to-[#F6D45E] bg-clip-text text-transparent transition-all duration-300 hover:bg-gradient-to-l hover:from-[#F6D45E] hover:to-[#FE7123]">
+          Deteksi Keramaian Pengunjung
+        </h2>
 
-  <div className="flex justify-center gap-8 w-full px-10">
-    <div className="flex-1 w-full lg:w-1/2">
-      <ChartKeramaian />
-    </div>
-    
-    <div className="flex-1 w-full lg:w-1/2">
-    <ScrollArea>
-      <div className="space-y-2">
-        {CardDescription.map((destination) => (
-          <DestinationCard
-            key={destination.rank}
-            rank={destination.rank}
-            title={destination.title}
-            location={destination.location}
-            imageUrl={destination.imageUrl}
-            onClick={() => alert("Coming Soon")}
-          />
-        ))}
-      </div>
-      <ScrollBar orientation="vertical" className="cursor-pointer" />
-    </ScrollArea>
-  </div>
+        <div className="flex justify-center gap-8 w-full px-10 mt-10">
+          <div className="flex-1 w-full lg:w-1/2">
+            <ChartKeramaian />
+          </div>
 
-  </div>
-</section>
+          <div className="flex-1 w-full lg:w-1/2">
+            <ScrollArea>
+              <div className="space-y-2">
+                {CardDescription.map((destination) => (
+                  <DestinationCard
+                    key={destination.rank}
+                    rank={destination.rank}
+                    title={destination.title}
+                    location={destination.location}
+                    imageUrl={destination.imageUrl}
+                    onClick={() => alert("Coming Soon")}
+                  />
+                ))}
+              </div>
+              <ScrollBar orientation="vertical" className="cursor-pointer" />
+            </ScrollArea>
+          </div>
+        </div>
+      </section>
 
       {/* Kata - Kata */}
       <section className="bg-gradient-to-tr from-[#FE7123] to-[#F6D45E] text-white text-center py-32">

@@ -1,5 +1,7 @@
 "use client";
 
+import { AiOutlineBars } from "react-icons/ai";
+import { useState, useEffect } from "react";
 import { Bar, BarChart, CartesianGrid, XAxis, LabelList } from "recharts";
 import {
   ChartContainer,
@@ -7,68 +9,138 @@ import {
   ChartTooltip,
 } from "@/components/ui/chart";
 import { type ChartConfig } from "@/components/ui/chart";
-import { TrendingUp } from "lucide-react";
 
 import {
   Card,
   CardContent,
-  CardDescription,
-  CardFooter,
   CardTitle,
   CardHeader,
 } from "@/components/ui/card";
 
-const rawData = [
-  { week: "Sunday", desktop: 186 },
-  { week: "Monday", desktop: 305 },
-  { week: "Tuesday", desktop: 237 },
-  { week: "Thursday", desktop: 73 },
-  { week: "Friday", desktop: 209 },
-  { week: "Saturday", desktop: 214 },
-  { week: "Sunday", desktop: 100 },
-  { week: "Monday", desktop: 80 },
-  { week: "Thursday", desktop: 50 },
-  { week: "Friday", desktop: 40 },
-];
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
-// Agregasi data untuk mendapatkan total per hari
-const aggregatedData = [
-  "Sunday",
-  "Monday",
-  "Tuesday",
-  "Thursday",
-  "Friday",
-  "Saturday",
-].map((day) => {
-  return {
-    week: day,
-    desktop: rawData
-      .filter((item) => item.week === day)
-      .reduce((acc, item) => acc + item.desktop, 0),
-  };
-});
+// Tipe data yang diterima dari API
+export interface VisitorData {
+  id: number;
+  nama_wisata: string;
+  tanggal: string;
+  pengunjung_di_dalam: number;
+}
 
+// Konfigurasi chart
 const chartConfig = {
-  desktop: {
-    label: "Desktop",
+  visitors: {
+    label: "Visitors",
     color: "#FE7123",
   },
 } satisfies ChartConfig;
 
+// Daftar bulan untuk dropdown
+const months = [
+  "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+  "Juli", "Agustus", "September", "Oktober", "November", "Desember",
+];
+
 export function ChartKeramaian() {
+  const [chartData, setChartData] = useState<{ week: string; visitors: number }[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [selectedMonth, setSelectedMonth] = useState<string | null>(null); // State bulan yang dipilih
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await fetch("http://localhost:3000/api/get-visitors"); // Endpoint API
+        if (!response.ok) {
+          throw new Error("Failed to fetch data");
+        }
+
+        const apiResponse = await response.json();
+        if (!Array.isArray(apiResponse.data)) {
+          throw new Error("Invalid data format from API");
+        }
+
+        // Mengelompokkan dan menjumlahkan data berdasarkan tanggal
+        const groupedData = apiResponse.data.reduce((acc: Record<string, number>, item: VisitorData) => {
+          const formattedDate = new Date(item.tanggal).toLocaleDateString("id-ID", {
+            day: "numeric",
+            month: "short", // Menggunakan bulan singkat (Jan, Feb, dll.)
+          });
+
+          const visitorsCount =
+            typeof item.pengunjung_di_dalam === "number" ? item.pengunjung_di_dalam : 0;
+
+          if (!acc[formattedDate]) {
+            acc[formattedDate] = 0;
+          }
+          acc[formattedDate] += visitorsCount;
+          return acc;
+        }, {});
+
+        const aggregatedData = Object.entries(groupedData).map(([week, visitors]) => ({
+          week,
+          visitors: visitors as number,
+        }));
+
+        setChartData(aggregatedData);
+        setLoading(false);
+      } catch (err: any) {
+        setError(err.message);
+        setLoading(false);
+      }
+    }
+
+    fetchData();
+  }, []);
+
+  // Filter data berdasarkan bulan yang dipilih
+  const filteredData = selectedMonth
+    ? chartData.filter((item) => {
+        const month = new Date(item.week).toLocaleDateString("id-ID", { month: "long" });
+        return month === selectedMonth;
+      })
+    : chartData;
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
   return (
     <Card>
       <CardHeader>
         <CardTitle className="mb-4">
           <div className="flex justify-between items-center w-full">
-            <div>Chart - Tingkat Keramain</div>
-            <div className="p-1 rounded-full hover:bg-gray-200 cursor-pointer" onClick={() => console.log("Icon clicked!")}>
-    <img
-      src="/icon.png"
-      alt="Icon"
-      className="h-[12px] w-[12px]"
-    />
-  </div>
+            <div>Chart - Tingkat Keramaian</div>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <AiOutlineBars className="h-5 w-5 cursor-pointer" />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-56">
+                <DropdownMenuGroup>
+                  {months.map((month) => (
+                    <DropdownMenuItem
+                      key={month}
+                      onClick={() => setSelectedMonth(month)}
+                    >
+                      {month}
+                    </DropdownMenuItem>
+                  ))}
+                  <DropdownMenuItem onClick={() => setSelectedMonth(null)}>
+                    Semua Bulan
+                  </DropdownMenuItem>
+                </DropdownMenuGroup>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </CardTitle>
       </CardHeader>
@@ -76,8 +148,8 @@ export function ChartKeramaian() {
         <ChartContainer config={chartConfig} className="min-h-[400px] w-full">
           <BarChart
             accessibilityLayer
-            data={aggregatedData}
-            margin={{ top: 20 }}
+            data={filteredData}
+            margin={{ top: 30 }}
           >
             <CartesianGrid vertical={false} />
             <XAxis
@@ -85,13 +157,12 @@ export function ChartKeramaian() {
               tickLine={false}
               tickMargin={10}
               axisLine={false}
-              tickFormatter={(value) => value} // No need to slice for weeks
             />
             <ChartTooltip
               cursor={false}
               content={<ChartTooltipContent hideLabel />}
             />
-            <Bar dataKey="desktop" fill="var(--color-desktop)" radius={4}>
+            <Bar dataKey="visitors" fill="var(--color-visitors, #FE7123)" radius={4}>
               <LabelList
                 position="top"
                 offset={12}

@@ -38,28 +38,6 @@ export function DialogCamera() {
             className="w-full h-64 object-cover rounded-md"
           />
         </div>
-        <div className="space-y-2">
-          {/* Baris tombol */}
-          <div className="grid grid-cols-2 gap-2">
-            <Button variant="outline" className="bg-white text-[#FE7123]">
-              Capture Photo
-            </Button>
-            <Button variant="outline" className="bg-white text-[#FE7123]">
-              Live Detection
-            </Button>
-          </div>
-          <div className="grid grid-cols-3 gap-2">
-            <Button variant="outline" className="bg-white text-[#FE7123]">
-              Switch Camera
-            </Button>
-            <Button variant="outline" className="bg-white text-[#FE7123]">
-              Change Speed
-            </Button>
-            <Button variant="outline" className="bg-white text-[#FE7123]">
-              Reset
-            </Button>
-          </div>
-        </div>
         {/* Informasi tambahan */}
         <div className="mt-4 text-center text-sm">
           <p>Model Inference Time: 312ms</p>

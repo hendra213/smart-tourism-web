@@ -23,8 +23,8 @@ export const upsertData = async (
       pengunjung_masuk: parseInt(pengunjungMasuk),
       pengunjung_keluar: parseInt(pengunjungKeluar),
       pengunjung_di_dalam: parseInt(pengunjungDiDalam),
-      suhu: parseInt(suhu),
-      kelembapan: parseInt(kelembapan),
+      suhu: parseFloat(suhu),
+      kelembapan: parseFloat(kelembapan),
     };
 
     if (checkData) {
