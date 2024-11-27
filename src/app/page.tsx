@@ -133,6 +133,8 @@ export default function Home() {
      }
    };
 
+   const [selectedDestination, setSelectedDestination] = useState<string | null>(null);
+
   return (
     <div className="font-poppins text-gray-900 relative">
       {/* Header */}
@@ -497,34 +499,37 @@ export default function Home() {
 
       {/* Deteksi Keramaian Pengunjung Section */}
       <section className="text-center bg-white py-16" id="destinasi">
-        <h2 className="text-4xl uppercase font-bold mb-6  bg-gradient-to-r from-[#FE7123] to-[#F6D45E] bg-clip-text text-transparent transition-all duration-300 hover:bg-gradient-to-l hover:from-[#F6D45E] hover:to-[#FE7123]">
-          Deteksi Keramaian Pengunjung
-        </h2>
+      <h2 className="text-4xl uppercase font-bold mb-6 bg-gradient-to-r from-[#FE7123] to-[#F6D45E] bg-clip-text text-transparent transition-all duration-300 hover:bg-gradient-to-l hover:from-[#F6D45E] hover:to-[#FE7123]">
+        Deteksi Keramaian Pengunjung
+      </h2>
 
-        <div className="flex justify-center gap-8 w-full px-10 mt-10">
-          <div className="flex-1 w-full lg:w-1/2">
-            <ChartKeramaian />
-          </div>
-
-          <div className="flex-1 w-full lg:w-1/2">
-            <ScrollArea>
-              <div className="space-y-2">
-                {CardDescription.map((destination) => (
-                  <DestinationCard
-                    key={destination.rank}
-                    rank={destination.rank}
-                    title={destination.title}
-                    location={destination.location}
-                    imageUrl={destination.imageUrl}
-                    onClick={() => alert("Coming Soon")}
-                  />
-                ))}
-              </div>
-              <ScrollBar orientation="vertical" className="cursor-pointer" />
-            </ScrollArea>
-          </div>
+      <div className="flex justify-center gap-8 w-full px-10 mt-10">
+        {/* Chart Keramaian */}
+        <div className="flex-1 w-full lg:w-1/2">
+          <ChartKeramaian selectedDestination={selectedDestination} />
         </div>
-      </section>
+
+        {/* Daftar Destinasi */}
+        <div className="flex-1 w-full lg:w-1/2">
+          <ScrollArea>
+            <div className="space-y-2">
+              {CardDescription.map((destination) => (
+                <DestinationCard
+                  key={destination.rank}
+                  rank={destination.rank}
+                  title={destination.title}
+                  location={destination.location}
+                  imageUrl={destination.imageUrl}
+                  onClick={() => setSelectedDestination(destination.title)} // Perbarui state
+                />
+              ))}
+            </div>
+            <ScrollBar orientation="vertical" className="cursor-pointer" />
+          </ScrollArea>
+        </div>
+      </div>
+      
+    </section>
 
       {/* Kata - Kata */}
       <section className="bg-gradient-to-tr from-[#FE7123] to-[#F6D45E] text-white text-center py-32">

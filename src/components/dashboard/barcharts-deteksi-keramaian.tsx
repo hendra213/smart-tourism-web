@@ -47,16 +47,22 @@ const months = [
   "Juli", "Agustus", "September", "Oktober", "November", "Desember",
 ];
 
-export function ChartKeramaian() {
-  const [chartData, setChartData] = useState<{ week: string; visitors: number }[]>([]);
+interface ChartKeramaianProps {
+  selectedDestination: string | null; // Destinasi yang dipilih
+}
+
+export function ChartKeramaian({ selectedDestination }: ChartKeramaianProps) {
+  const [chartData, setChartData] = useState<
+    { week: string; visitors: number; nama_wisata: string }[]
+  >([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [selectedMonth, setSelectedMonth] = useState<string | null>(null); // State bulan yang dipilih
+  const [selectedMonth, setSelectedMonth] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await fetch("http://localhost:3000/api/get-visitors"); // Endpoint API
+        const response = await fetch("http://localhost:3000/api/get-visitors");
         if (!response.ok) {
           throw new Error("Failed to fetch data");
         }
@@ -66,29 +72,32 @@ export function ChartKeramaian() {
           throw new Error("Invalid data format from API");
         }
 
-        // Mengelompokkan dan menjumlahkan data berdasarkan tanggal
-        const groupedData = apiResponse.data.reduce((acc: Record<string, number>, item: VisitorData) => {
-          const formattedDate = new Date(item.tanggal).toLocaleDateString("id-ID", {
-            day: "numeric",
-            month: "short", // Menggunakan bulan singkat (Jan, Feb, dll.)
-          });
+        // Mengelompokkan data berdasarkan tanggal dan destinasi
+        const groupedData = apiResponse.data.reduce(
+          (
+            acc: Record<string, { week: string; visitors: number; nama_wisata: string }>,
+            item: VisitorData
+          ) => {
+            const formattedDate = new Date(item.tanggal).toLocaleDateString("id-ID", {
+              day: "numeric",
+              month: "short", // Contoh: '1 Jan'
+            });
 
-          const visitorsCount =
-            typeof item.pengunjung_di_dalam === "number" ? item.pengunjung_di_dalam : 0;
+            const key = `${formattedDate}_${item.nama_wisata}`;
+            if (!acc[key]) {
+              acc[key] = {
+                week: formattedDate,
+                visitors: 0,
+                nama_wisata: item.nama_wisata,
+              };
+            }
+            acc[key].visitors += item.pengunjung_di_dalam || 0;
+            return acc;
+          },
+          {}
+        );
 
-          if (!acc[formattedDate]) {
-            acc[formattedDate] = 0;
-          }
-          acc[formattedDate] += visitorsCount;
-          return acc;
-        }, {});
-
-        const aggregatedData = Object.entries(groupedData).map(([week, visitors]) => ({
-          week,
-          visitors: visitors as number,
-        }));
-
-        setChartData(aggregatedData);
+        setChartData(Object.values(groupedData));
         setLoading(false);
       } catch (err: any) {
         setError(err.message);
@@ -99,13 +108,16 @@ export function ChartKeramaian() {
     fetchData();
   }, []);
 
-  // Filter data berdasarkan bulan yang dipilih
-  const filteredData = selectedMonth
-    ? chartData.filter((item) => {
-        const month = new Date(item.week).toLocaleDateString("id-ID", { month: "long" });
-        return month === selectedMonth;
-      })
-    : chartData;
+  // Filter data berdasarkan bulan dan destinasi
+  const filteredData = chartData.filter((item) => {
+    const month = new Date(item.week).toLocaleDateString("id-ID", { month: "long" });
+    const matchMonth = selectedMonth ? month === selectedMonth : true;
+    const matchDestination = selectedDestination
+      ? item.nama_wisata === selectedDestination
+      : true;
+
+    return matchMonth && matchDestination;
+  });
 
   if (loading) {
     return <div>Loading...</div>;
@@ -118,14 +130,21 @@ export function ChartKeramaian() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="mb-4">
+        <CardTitle className="flex flex-col items-center space-y-4">
           <div className="flex justify-between items-center w-full">
             <div>Chart - Tingkat Keramaian</div>
+
+             {/* Destinasi yang dipilih */}
+        {selectedDestination && (
+          <span className="text-sm text-gray-600 bg-gray-100 px-3 py-1 rounded-full">
+            {selectedDestination}
+          </span>
+        )}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <AiOutlineBars className="h-5 w-5 cursor-pointer" />
               </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-56">
+              <DropdownMenuContent className="w-56 z-50">
                 <DropdownMenuGroup>
                   {months.map((month) => (
                     <DropdownMenuItem

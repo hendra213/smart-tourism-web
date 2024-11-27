@@ -33,9 +33,9 @@ export function DialogCamera() {
         <div className="my-4">
           {/* Gambar deteksi */}
           <iframe
-            src="https://www.youtube.com/embed/Szt_kHWKwNo?autoplay=1"
+            src="http://192.168.1.7:5000/video_feed"
             allow="autoplay; picture-in-picture"
-            className="w-full h-64 object-cover rounded-md"
+            className="w-96 h-96 object-cover rounded-md"
           />
         </div>
         {/* Informasi tambahan */}
