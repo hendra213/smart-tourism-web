@@ -53,6 +53,6 @@ model visitors {
   pengunjung_masuk    Int?
   pengunjung_keluar   Int?
   pengunjung_di_dalam Int?
-  suhu                Int?
-  kelembapan          Int?
+  suhu                Decimal? @db.Decimal(11, 2)
+  kelembapan          Decimal? @db.Decimal(11, 2)
 }

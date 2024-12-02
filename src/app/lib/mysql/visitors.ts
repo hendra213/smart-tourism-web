@@ -7,7 +7,11 @@ export const getDataChart = async () => {
         id: true,
         nama_wisata: true,
         tanggal: true,
+        pengunjung_keluar: true,
+        pengunjung_masuk: true,
         pengunjung_di_dalam: true,
+        suhu: true,
+        kelembapan: true,
       },
       orderBy: {
         tanggal: "desc",
