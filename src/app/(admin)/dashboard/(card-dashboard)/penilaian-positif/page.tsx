@@ -64,15 +64,15 @@ export default function DashboardPenilaianKeseruluhan() {
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <BreadcrumbPage>Penilaian Keseruluhan</BreadcrumbPage>
+            <BreadcrumbPage>Penilaian Positif</BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
 
       <div className="flex h-full flex-col gap-6 mt-8">
-        <h2 className="text-2xl font-bold text-black">Penilaian Keseruluhan</h2>
+        <h2 className="text-2xl font-bold text-black">Penilaian Positif</h2>
         <p className="font-base text-muted-foreground">
-          Penilaian Keseluruhan adalah jumlah keseluruhan penilaian ulasan yang
+          Penilaian positif adalah jumlah keseluruhan ulasan positif yang
           diterima.
         </p>
 

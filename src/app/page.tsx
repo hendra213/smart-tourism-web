@@ -1,62 +1,23 @@
 "use client";
 
-import DialogFlowChat from "@/components/dashboard/dialogflow-chat";
 import { signIn } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState, useEffect } from "react";
-import { AiFillWechat } from "react-icons/ai";
+
+<!-- import { AiFillWechat } from "react-icons/ai";
 import { FaBars, FaTimes } from "react-icons/fa"; // Import icons for hamburger menu
 import { ChartKeramaian } from "@/components/dashboard/barcharts-deteksi-keramaian";
 import DestinationCard from "@/components/maps/card-destination";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { DialogCamera } from "@/components/dashboard/pop-up-camera";
 import { DialogWisata } from "@/components/dashboard/pop-up-submit";
-import { VisitorData } from "@/components/dashboard/barcharts-deteksi-keramaian";
+import { VisitorData } from "@/components/dashboard/barcharts-deteksi-keramaian"; -->
 
 // Data destinasi
-const CardDescription = [
-  {
-    rank: 1,
-    title: "Danau Toba",
-    location: "Sumatera Utara",
-    lat: 2.6845,
-    lng: 98.8588,
-    imageUrl: "/images/danautoba.jpg",
-  },
-  {
-    rank: 2,
-    title: "Candi Borobudur",
-    location: "Jawa Tengah",
-    lat: -7.6079,
-    lng: 110.2038,
-    imageUrl: "/images/borobudur.jpg",
-  },
-  {
-    rank: 3,
-    title: "Likupang",
-    location: "Sulawesi Utara",
-    lat: 1.6824,
-    lng: 125.0568,
-    imageUrl: "/images/likupang.jpg",
-  },
-  {
-    rank: 4,
-    title: "Mandalika",
-    location: "Nusa Tenggara Barat",
-    lat: -8.8955,
-    lng: 116.2951,
-    imageUrl: "/images/mandalika.jpg",
-  },
-  {
-    rank: 5,
-    title: "Labuan Bajo",
-    location: "Nusa Tenggara Timur",
-    lat: -8.4539,
-    lng: 119.889,
-    imageUrl: "/images/labuanbajo.jpg",
-  },
-];
+
+=======
+
 
 // Data gambar destinasi
 const destinations = [
@@ -68,10 +29,8 @@ const destinations = [
 ];
 
 export default function Home() {
-  const [shine, setShine] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [fade, setFade] = useState(false);
-  const [showChatPopup, setShowChatPopup] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false); // State to control hamburger menu
 
@@ -91,16 +50,6 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setShine(true);
-      setTimeout(() => setShine(false), 1000);
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, []);
-
-  // Mendeteksi scroll untuk mengecilkan navbar
-  useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 50) {
         setIsScrolled(true);
@@ -119,29 +68,46 @@ export default function Home() {
     setIsMenuOpen(!isMenuOpen);
   };
 
-  // selected place on chart
 
-  // image preview
-   // State mendukung tipe string (URL) atau null
-   const [image, setImage] = useState<string | null>(null);
+  // Bagian Popup Fitur Unggulan
+  const [activeFeature, setActiveFeature] = useState<number | null>(null);
 
-   // Tipe parameter eksplisit pada event
-   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-     const file = e.target.files?.[0]; // Cek jika file dipilih
-     if (file) {
-       setImage(URL.createObjectURL(file)); // Buat URL pratinjau
-     }
-   };
-
-   const [selectedDestination, setSelectedDestination] = useState<string | null>(null);
+  const features = [
+    {
+      title: "Dashboard",
+      image: "/keuntungan1.png",
+      popupImage: "/gambarDashboard.png",
+      description:
+        "Dashboard Performa Wisata memudahkan pengguna untuk memantau kinerja destinasi melalui data ulasan dan grafik.",
+      popupContent:
+        "Halaman ini akan menampilkan berbagai informasi terkait performa destinasi. Dashboard di website Explorenesia menyediakan tampilan yang intuitif dan informatif bagi pengguna setelah login. Di sini, pengguna dapat melihat statistik penting seperti tingkat respon, ulasan, popularitas, dan penilaian keseluruhan untuk masing-masing destinasi. Jika pengguna mengklik bagian Performa di Dashboard, mereka akan diarahkan ke tampilan yang lebih detail mengenai kinerja masing-masing destinasi.",
+    },
+    {
+      title: "Similar Destination",
+      image: "/keuntungan2.png",
+      popupImage: "/gambarSimilarDestination.png",
+      description:
+        "Fitur Similar Destination memberikan rekomendasi destinasi serupa berdasarkan preferensi pengguna.",
+      popupContent:
+        "Fitur Similar Destination pada ExploreNesia merekomendasikan destinasi wisata yang mirip dengan Destinasi Pariwisata Super Prioritas (DPSP) yang sedang dilihat, dengan informasi seperti Rate Price, Performa (contoh: 4.4 ⭐), Tingkat Respons (contoh: 100%), Jumlah Ulasan (contoh: 10,428), Popularitas (contoh: 82%), Penilaian Keseluruhan (contoh: 8,519), dan Lokasi Lengkap. Fitur ini dirancang untuk membantu pengguna membandingkan pilihan destinasi dengan karakteristik serupa sehingga mempermudah perencanaan perjalanan wisata.",
+    },
+    {
+      title: "Rate Trend",
+      image: "/keuntungan3.png",
+      popupImage: "/gambarRateTrend.png",
+      description:
+        "Dengan Rate Trend, pengguna dapat melihat tren penilaian destinasi seiring waktu dan sentimen.",
+      popupContent:
+        "Pada halaman ini, pengguna akan melihat grafik yang menunjukkan tren penilaian dari waktu ke waktu untuk masing-masing destinasi. Grafik ini memberikan gambaran visual tentang bagaimana tingkat kepuasan wisatawan berubah, serta memudahkan identifikasi pola atau fluktuasi dalam penilaian. Pengguna dapat menganalisis data ini untuk memahami periode puncak atau penurunan rating, sehingga dapat mengambil langkah-langkah strategis untuk meningkatkan pengalaman wisatawan.",
+    },
+  ];
 
   return (
     <div className="font-poppins text-gray-900 relative">
       {/* Header */}
       <header
-        className={`fixed w-full top-0 left-0 z-10 transition-all duration-300 ease-in-out ${
-          isScrolled ? "bg-white shadow-md p-2" : "bg-white p-4 shadow-md"
-        }`}
+        className={`fixed w-full top-0 left-0 z-10 transition-all duration-300 ease-in-out ${isScrolled ? "bg-white shadow-md p-2" : "bg-white p-4 shadow-md"
+          }`}
       >
         <div className="flex justify-between items-center max-w-9xl mx-auto">
           <div className="flex items-center">
@@ -167,9 +133,8 @@ export default function Home() {
 
             {/* Navbar Links */}
             <nav
-              className={`${
-                isMenuOpen ? "flex" : "hidden"
-              } flex-col md:flex md:flex-row md:items-center mr-10 space-x-5 space-y-4 md:space-y-0 md:space-x-5 transition-all duration-300 ease-in-out`}
+              className={`${isMenuOpen ? "flex" : "hidden"
+                } flex-col md:flex md:flex-row md:items-center mr-10 space-x-5 space-y-4 md:space-y-0 md:space-x-5 transition-all duration-300 ease-in-out`}
             >
               <a
                 href="#beranda"
@@ -186,29 +151,26 @@ export default function Home() {
               <a href="#fitur" className="text-gray-700 hover:text-orange-600">
                 Fitur Unggulan
               </a>
-              <button
-                onClick={() => signIn()}
-                className=" md:inline-block mr-4 border-2 border-orange-200 py-1 px-4 font-bold text-[#f38e58] rounded transition-all duration-100 hover:bg-gradient-to-l hover:from-[#FE7123] hover:to-[#F6D45E] hover:text-white"
+              <a
+                href="#contact"
+                className="text-gray-700 hover:text-orange-600"
               >
-                Masuk
-              </button>
+                Kontak
+              </a>
             </nav>
+            <button
+              onClick={() => signIn()}
+              className="hidden md:inline-block mr-4 border-2 border-orange-200 py-1 px-4 font-bold text-[#f38e58] rounded transition-all duration-100 hover:bg-gradient-to-l hover:from-[#FE7123] hover:to-[#F6D45E] hover:text-white"
+            >
+              Masuk
+            </button>
           </div>
         </div>
       </header>
 
       {/* Rest of the content (unchanged) */}
 
-      {/* Floating Chat Button */}
-      <div
-        className="fixed bottom-6 right-6 bg-white text-white rounded-full p-3 shadow-lg cursor-pointer z-50"
-        onClick={() => setShowChatPopup(true)}
-      >
-        <AiFillWechat className="fill-[#FE7123] text-4xl" />
-      </div>
-
-      {/* Chat Popup */}
-      <DialogFlowChat />
+      <ChatBot />
 
       {/* Hero Section */}
       <section
@@ -257,62 +219,87 @@ export default function Home() {
         </h2>
         <div className="flex flex-wrap justify-center gap-4 max-w-5xl mx-auto">
           {/* Gambar 1 */}
-          <div
-            className="relative bg-cover bg-center h-80 w-80 rounded-md shadow-lg overflow-hidden transition-transform duration-500 hover:scale-105 hover:shadow-2xl"
-            style={{ backgroundImage: "url(/images/likupang.jpg)" }}
-          >
-            <div className="absolute inset-0 bg-black bg-opacity-20 flex items-end p-4">
-              <p className="text-white font-bold text-lg">Likupang</p>
+          <Link href={"/detaildestinasi/likupang"}>
+            <div
+              className="relative bg-cover bg-center h-80 w-80 rounded-md shadow-lg overflow-hidden transition-transform duration-500 hover:scale-105 hover:shadow-2xl"
+              style={{ backgroundImage: "url(/images/likupang.jpg)" }}
+            >
+              <div className="absolute inset-0 bg-black bg-opacity-20 flex flex-col justify-end items-start space-y-2 p-4">
+                <p className="text-white font-bold text-lg">Likupang</p>
+                <button className="bg-[#FF8225] rounded-md text-white p-1.5 hover:bg-orange-500">
+                  Selengkapnya
+                </button>
+              </div>
             </div>
-          </div>
+          </Link>
 
           {/* Gambar 2 */}
-          <div
-            className="relative bg-cover bg-center h-80 w-80 rounded-md shadow-lg overflow-hidden transition-transform duration-500 hover:scale-105 hover:shadow-2xl"
-            style={{
-              backgroundImage: "url(/images/mandalika.jpg)",
-            }}
-          >
-            <div className="absolute inset-0 bg-black bg-opacity-20 flex items-end p-4">
-              <p className="text-white font-bold text-lg">Mandalika</p>
+          <Link href={"/detaildestinasi/mandalika"}>
+            <div
+              className="relative bg-cover bg-center h-80 w-80 rounded-md shadow-lg overflow-hidden transition-transform duration-500 hover:scale-105 hover:shadow-2xl"
+              style={{
+                backgroundImage: "url(/images/mandalika.jpg)",
+              }}
+            >
+              <div className="absolute inset-0 bg-black bg-opacity-20 flex flex-col justify-end items-start space-y-2 p-4">
+                <p className="text-white font-bold text-lg">Mandalika</p>
+                <button className="bg-[#FF8225] rounded-md text-white p-1.5 hover:bg-orange-500">
+                  Selengkapnya
+                </button>
+              </div>
             </div>
-          </div>
+          </Link>
 
           {/* Gambar 3 */}
-          <div
-            className="relative bg-cover bg-center h-80 w-80 rounded-md shadow-lg overflow-hidden transition-transform duration-500 hover:scale-105 hover:shadow-2xl"
-            style={{
-              backgroundImage: "url(/images/borobudur.jpg)",
-            }}
-          >
-            <div className="absolute inset-0 bg-black bg-opacity-20 flex items-end p-4">
-              <p className="text-white font-bold text-lg">Borobudur</p>
+          <Link href={"/detaildestinasi/borobudur"}>
+            <div
+              className="relative bg-cover bg-center h-80 w-80 rounded-md shadow-lg overflow-hidden transition-transform duration-500 hover:scale-105 hover:shadow-2xl"
+              style={{
+                backgroundImage: "url(/images/borobudur.jpg)",
+              }}
+            >
+              <div className="absolute inset-0 bg-black bg-opacity-20 flex flex-col justify-end items-start space-y-2 p-4">
+                <p className="text-white font-bold text-lg">Borobudur</p>
+                <button className="bg-[#FF8225] rounded-md text-white p-1.5 hover:bg-orange-500">
+                  Selengkapnya
+                </button>
+              </div>
             </div>
-          </div>
+          </Link>
 
           {/* Gambar 4 */}
-          <div
-            className="relative bg-cover bg-center h-80 w-80 rounded-md shadow-lg overflow-hidden transition-transform duration-500 hover:scale-105 hover:shadow-2xl"
-            style={{
-              backgroundImage: "url(/images/labuanbajo.jpg)",
-            }}
-          >
-            <div className="absolute inset-0 bg-black bg-opacity-20 flex items-end p-4">
-              <p className="text-white font-bold text-lg">Labuan Bajo</p>
+          <Link href={"/detaildestinasi/labuan-bajo"}>
+            <div
+              className="relative bg-cover bg-center h-80 w-80 rounded-md shadow-lg overflow-hidden transition-transform duration-500 hover:scale-105 hover:shadow-2xl"
+              style={{
+                backgroundImage: "url(/images/labuanbajo.jpg)",
+              }}
+            >
+              <div className="absolute inset-0 bg-black bg-opacity-20 flex flex-col justify-end items-start space-y-2 p-4">
+                <p className="text-white font-bold text-lg">Labuan Bajo</p>
+                <button className="bg-[#FF8225] rounded-md text-white p-1.5 hover:bg-orange-500">
+                  Selengkapnya
+                </button>
+              </div>
             </div>
-          </div>
+          </Link>
 
           {/* Gambar 5 */}
-          <div
-            className="relative bg-cover bg-center h-80 w-80 rounded-md shadow-lg overflow-hidden transition-transform duration-500 hover:scale-105 hover:shadow-2xl"
-            style={{
-              backgroundImage: "url(/images/danautoba.jpg)",
-            }}
-          >
-            <div className="absolute inset-0 bg-black bg-opacity-20 flex items-end p-4">
-              <p className="text-white font-bold text-lg">Danau Toba</p>
+          <Link href={"/detaildestinasi/danau-toba"}>
+            <div
+              className="relative bg-cover bg-center h-80 w-80 rounded-md shadow-lg overflow-hidden transition-transform duration-500 hover:scale-105 hover:shadow-2xl"
+              style={{
+                backgroundImage: "url(/images/danautoba.jpg)",
+              }}
+            >
+              <div className="absolute inset-0 bg-black bg-opacity-20 flex flex-col justify-end items-start space-y-2 p-4">
+                <p className="text-white font-bold text-lg">Danau Toba</p>
+                <button className="bg-[#FF8225] rounded-md text-white p-1.5 hover:bg-orange-500">
+                  Selengkapnya
+                </button>
+              </div>
             </div>
-          </div>
+          </Link>
         </div>
       </section>
 
@@ -351,9 +338,8 @@ export default function Home() {
         </div>
         <div className="mx-auto max-w-2xl bg-white mt-8 shadow-lg rounded-lg">
           <div
-            className={`w-full lg:h-72 md:h-64 sm:h-52 shadow-lg rounded-lg overflow-hidden relative transition-opacity duration-500 ease-in-out ${
-              fade ? "opacity-0" : "opacity-100"
-            }`}
+            className={`w-full lg:h-72 md:h-64 sm:h-52 shadow-lg rounded-lg overflow-hidden relative transition-opacity duration-500 ease-in-out ${fade ? "opacity-0" : "opacity-100"
+              }`}
           >
             <Image
               src={destinations[currentImageIndex].image}
@@ -372,48 +358,56 @@ export default function Home() {
           Fitur Unggulan Explorenesia
         </h1>
         <div className="grid grid-flow-row-dense grid-cols-3 grid-rows-auto sm:grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto p-4">
-          <div className="flex flex-col justify-center items-center bg-white border border-gray-300 shadow-md shadow-[#FE7123] h-auto rounded-lg p-4">
-            <h1 className="uppercase text-[#FE7123] font-bold lg:text-2xl md:text-2xl sm:text-lg">
-              dashboard
-            </h1>
-            <img
-              src="/keuntungan1.png"
-              alt="Keuntungan 1"
-              className="lg:w-[16rem] md:w-[16rem] sm:w-[12rem]"
-            />
-            <p className="text-base font-medium">
-              Dashboard Performa Wisata memudahkan pengguna untuk memantau
-              kinerja destinasi melalui data ulasan dan grafik.
-            </p>
-          </div>
-          <div className="flex flex-col justify-center items-center bg-white border border-gray-300 shadow-md shadow-[#FE7123] h-auto rounded-lg p-4">
-            <h1 className="uppercase text-[#FE7123] font-bold lg:text-xl md:text-2xl sm:text-lg">
-              Similar Destination
-            </h1>
-            <img
-              src="/keuntungan2.png"
-              alt="Keuntungan 2"
-              className="lg:w-[16rem] md:w-[16rem] sm:w-[12rem]"
-            />
-            <p className="text-base font-medium">
-              Fitur Similar Destination memberikan rekomendasi destinasi serupa
-              berdasarkan preferensi pengguna.
-            </p>
-          </div>
-          <div className="flex flex-col justify-center items-center bg-white border border-gray-300 shadow-md shadow-[#FE7123] h-auto rounded-lg p-4">
-            <h1 className="uppercase text-[#FE7123] font-bold lg:text-xl md:text-2xl sm:text-lg">
-              rate trend
-            </h1>
-            <img
-              src="/keuntungan3.png"
-              alt="Keuntungan 3"
-              className="lg:w-[16rem] md:w-[16rem] sm:w-[12rem]"
-            />
-            <p className="text-base font-medium">
-              Dengan Rate Trend, pengguna dapat melihat tren penilaian destinasi
-              seiring waktu dan sentimen.
-            </p>
-          </div>
+          {features.map((feature, index) => (
+            <Dialog
+              key={index}
+              open={activeFeature === index}
+              onOpenChange={(isOpen) => setActiveFeature(isOpen ? index : null)}
+            >
+              <DialogTrigger asChild>
+                <div className="flex flex-col justify-center items-center bg-white border border-gray-300 shadow-md shadow-[#FE7123] h-auto rounded-lg p-4 transform transition-transform hover:scale-105 cursor-pointer">
+                  <h1 className="uppercase text-[#FE7123] font-bold lg:text-2xl md:text-2xl sm:text-lg">
+                    {feature.title}
+                  </h1>
+                  <img
+                    src={feature.image}
+                    alt={feature.title}
+                    className="lg:w-[16rem] md:w-[16rem] sm:w-[12rem]"
+                  />
+                  <p className="text-base font-medium text-center text-black">
+                    {feature.description}
+                  </p>
+                </div>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-[33vw]">
+                <DialogHeader>
+                  <DialogTitle className="text-[#FE7123] uppercase flex justify-center text-xl">
+                    {feature.title}
+                  </DialogTitle>
+                </DialogHeader>
+                <div className="py-4 flex flex-col items-center">
+                  <img
+                    src={feature.popupImage}
+                    alt={`Popup ${feature.title}`}
+                    className="w-[70%] mb-2 shadow-lg"
+                  />
+                  <ScrollArea className="h-[100px]">
+                    <p className="text-black text-justify px-4">
+                      {feature.popupContent}
+                    </p>
+                  </ScrollArea>
+                </div>
+                <DialogFooter>
+                  <button
+                    className="inline-flex justify-center rounded-md border border-transparent bg-orange-400 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-orange-500"
+                    onClick={() => setActiveFeature(null)}
+                  >
+                    Close
+                  </button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
+          ))}
         </div>
       </section>
 
@@ -560,20 +554,57 @@ export default function Home() {
           </div>
 
           <div className="text-center px-4">
-            <p className="text-xl font-bold">
+            <p className="text-xl font-bold uppercase mb-2">
               Badan Riset dan Inovasi Nasional (BRIN)
             </p>
-            <p className="text-justify">
-              Jl. Babarsari, Tambak Bayan, Caturtunggal, Kec. Depok, Kabupaten
-              Sleman, Daerah Istimewa Yogyakarta 55281
+            <p className="text-end mb-2">
+              Gedung B.J. Habibie, Jl. M.H. Thamrin No. 8, Jakarta Pusat 10340
+            </p>
+            <p className="text-end">
+              Whatsapp:{" "}
+              <a
+                href="https://wa.me/6281119333639"
+                className="hover:text-orange-500"
+              >
+                +62811-1933-3639
+              </a>
+            </p>
+            <p className="text-end">
+              Email:{" "}
+              <a
+                href="mailto:ppid@brin.go.id"
+                className="hover:text-orange-500"
+              >
+                ppid@brin.go.id
+              </a>
             </p>
           </div>
 
-          <div className="text-end px-4">
-            <p className="text-xl font-bold">PT GLOBAL DATA INSPIRASI</p>
-            <p className="">
+          <div className="text-end px-4" id="contact">
+            <p className="text-xl font-bold uppercase mb-2">
+              PT GLOBAL DATA INSPIRASI
+            </p>
+            <p className="text-end mb-2">
               Jl. Cik di Tiro No.34, Tarban, Kec. Gondokusuman, Kota Yogyakarta,
               Daerah Istimewa Yogyakarta 55223
+            </p>
+            <p className="text-end">
+              Whatsapp:{" "}
+              <a
+                href="https://wa.me/6281520100171"
+                className="hover:text-orange-500"
+              >
+                +62815-2010-0171
+              </a>
+            </p>
+            <p className="text-end">
+              Email:{" "}
+              <a
+                href="mailto:info@datains.id"
+                className="hover:text-orange-500"
+              >
+                info@datains.id
+              </a>
             </p>
           </div>
         </div>

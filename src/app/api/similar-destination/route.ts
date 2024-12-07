@@ -5,6 +5,7 @@ export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   let tempatWisata = searchParams.get("name");
   let arrTempatWisata: string[] = [];
+  let location = "none";
 
   if (!tempatWisata) {
     return NextResponse.json(
@@ -15,8 +16,11 @@ export async function GET(request: NextRequest) {
 
   switch (tempatWisata) {
     case "Borobudur":
+      location =
+        "Jalan Badrawati, Kecamatan Borobudur, Kabupaten Magelang, Jawa Tengah, Indonesia.";
       arrTempatWisata = [
         "Borobudur Temple",
+        "Watu Lumbung Hill",
         "Waduk Sempor",
         "Batik Trusmi",
         "Umbul Ponggok",
@@ -531,6 +535,8 @@ export async function GET(request: NextRequest) {
       ];
       break;
     case "Likupang":
+      location =
+        "Kecamatan Likupang Timur, Kabupaten Minahasa Utara, Provinsi Sulawesi Utara, Indonesia.";
       arrTempatWisata = [
         "Pantai Paal",
         "Pampang Cultural Park",
@@ -540,9 +546,10 @@ export async function GET(request: NextRequest) {
       ];
       break;
     case "Mandalika":
+      location =
+        "Kecamatan Pujut, Kabupaten Lombok Tengah, Provinsi Nusa Tenggara Barat, Indonesia.";
       arrTempatWisata = [
         "Sirkuit Internasional Pertamina Mandalika",
-        "Watu Lumbung Hill",
         "Jatiluwih Warisan Budaya Dunia",
         "Upside Down World",
         "Beachwalk XXI Cineplex Bali",
@@ -553,9 +560,13 @@ export async function GET(request: NextRequest) {
       ];
       break;
     case "Labuan Bajo":
+      location =
+        "Desa Labuan Bajo, Kecamatan Komodo, Kabupaten Manggarai Barat, Provinsi Nusa Tenggara Timur, Indonesia.";
       arrTempatWisata = ["Gua Batu Cermin"];
       break;
     case "Danau Toba":
+      location =
+        "Kecamatan Haranggaol Horisan, Kabupaten Simalungun, Provinsi Sumatera Utara, Indonesia.";
       arrTempatWisata = [
         "Danau Toba",
         "Pantai Panjang",
@@ -568,13 +579,188 @@ export async function GET(request: NextRequest) {
         "Harry Potter: A Forbidden Forest Experience",
       ];
       break;
+    case "Candi Prambanan":
+      location =
+        "Jalan Raya Solo - Yogyakarta, Kecamatan Prambanan, Kabupaten Sleman, Provinsi Daerah Istimewa Yogyakarta, Indonesia.";
+      arrTempatWisata = ["Candi Prambanan"];
+      break;
+    case "Candi Ratu Boko":
+      location =
+        "Jalan Raya Piyungan - Prambanan, Kecamatan Bokoharjo, Kabupaten Sleman, Provinsi Daerah Istimewa Yogyakarta, Indonesia.";
+      arrTempatWisata = ["Candi Ratu Boko"];
+      break;
+    case "Candi Gedong Songo":
+      location =
+        "Krajan, Kecamatan Banyukuning, Kabupaten Semarang, Provinsi Jawa Tengah, Indonesia.";
+      arrTempatWisata = ["Candi Gedong Songo"];
+      break;
+    case "Candi Ijo":
+      location =
+        "Jalan Candi Ijo, Kecamatan Sambirejo, Kabupaten Sleman, Provinsi Daerah Istimewa Yogyakarta, Indonesia.";
+      arrTempatWisata = ["Candi Ijo"];
+      break;
+    case "Candi Sambisari":
+      location =
+        "Jalan Candi Sambisari, Kecamatan Purwomartani, Kabupaten Sleman, Provinsi Daerah Istimewa Yogyakarta, Indonesia.";
+      arrTempatWisata = ["Candi Sambisari"];
+      break;
+    case "Candi Plaosan":
+      location =
+        "Jalan Candi Plaosan, Kecamatan Bugisan, Kabupaten Klaten, Provinsi Jawa Tengah, Indonesia.";
+      arrTempatWisata = ["Candi Plaosan"];
+      break;
+    case "Candi Arjuna":
+      location =
+        "Dieng Kulon, Kecamatan Batur, Kabupaten Banjarnegara, Provinsi Jawa Tengah, Indonesia.";
+      arrTempatWisata = ["Candi Arjuna"];
+      break;
+    case "Candi Sewu":
+      location =
+        "Jalan Raya Prambanan, Kecamatan Bugisan, Kabupaten Klaten, Provinsi Jawa Tengah, Indonesia.";
+      arrTempatWisata = ["Candi Sewu"];
+      break;
+    case "Candi Pawon":
+      location =
+        "Brojonalan, Kecamatan Wanurejo, Kabupaten Magelang, Provinsi Jawa Tengah, Indonesia.";
+      arrTempatWisata = ["Candi Pawon"];
+      break;
+    case "Candi Kalasan":
+      location =
+        "Kalibening, Kecamatan Tirtomartani, Kabupaten Sleman, Provinsi Daerah Istimewa Yogyakarta, Indonesia.";
+      arrTempatWisata = ["Candi Kalasan"];
+      break;
+    case "Jatiluwih Warisan Budaya Dunia":
+      location =
+        "Desa Jatiluwih, Kecamatan Penebel, Kabupaten Tabanan, Provinsi Bali, Indonesia.";
+      arrTempatWisata = ["Jatiluwih Warisan Budaya Dunia"];
+      break;
+    case "Upside Down World":
+      location =
+        "Jalan Bypass Ngurah Rai, Kecamatan Denpasar Selatan, Kota Denpasar, Provinsi Bali, Indonesia.";
+      arrTempatWisata = ["Upside Down World"];
+      break;
+    case "Beachwalk XXI Cineplex Bali":
+      location =
+        "Jalan Pantai Kuta, Kecamatan Kuta, Kabupaten Badung, Provinsi Bali, Indonesia.";
+      arrTempatWisata = ["Beachwalk XXI Cineplex Bali"];
+      break;
+    case "Trekking Rinjani Lombok":
+      location =
+        "Kecamatan Sembalun, Kabupaten Lombok Timur, Provinsi Nusa Tenggara Barat, Indonesia.";
+      arrTempatWisata = ["Trekking Rinjani Lombok"];
+      break;
+    case "Rinjani Trekking Farm":
+      location =
+        "Desa Senaru, Kecamatan Bayan, Kabupaten Lombok Utara, Provinsi Nusa Tenggara Barat, Indonesia.";
+      arrTempatWisata = ["Rinjani Trekking Farm"];
+      break;
+    case "Galeri Positive Negative Visual":
+      location =
+        "Jalan Petitenget, Kecamatan Kuta Utara, Kabupaten Badung, Provinsi Bali, Indonesia.";
+      arrTempatWisata = ["Galeri Positive Negative Visual"];
+      break;
+    case "Pampang Cultural Park":
+      location =
+        "Kecamatan Pampang, Kota Samarinda, Provinsi Kalimantan Timur, Indonesia.";
+      arrTempatWisata = ["Pampang Cultural Park"];
+      break;
+    case "Istana Kesultanan Gunung Tabur":
+      location =
+        "Desa Gunung Tabur, Kecamatan Gunung Tabur, Kabupaten Berau, Provinsi Kalimantan Timur, Indonesia.";
+      arrTempatWisata = ["Istana Kesultanan Gunung Tabur"];
+      break;
+    case "Museum Kesultanan Ternate":
+      location =
+        "Jalan Sultan Babullah, Kecamatan Ternate Selatan, Kota Ternate, Provinsi Maluku Utara, Indonesia.";
+      arrTempatWisata = ["Museum Kesultanan Ternate"];
+      break;
+    case "Pantai Klayar":
+      location =
+        "Desa Donorojo, Kecamatan Donorojo, Kabupaten Jepara, Provinsi Jawa Tengah, Indonesia.";
+      arrTempatWisata = ["Pantai Klayar"];
+      break;
+    case "Pantai Panjang":
+      location =
+        "Desa Suak Ribee, Kecamatan Meureubo, Kabupaten Aceh Barat, Provinsi Aceh, Indonesia.";
+      arrTempatWisata = ["Pantai Panjang"];
+      break;
+    case "Pantai Kukup":
+      location =
+        "Desa Kemadang, Kecamatan Tanjungsari, Kabupaten Gunung Kidul, Provinsi Daerah Istimewa Yogyakarta, Indonesia.";
+      arrTempatWisata = ["Pantai Kukup"];
+      break;
+    case "Pantai Parangtritis":
+      location =
+        "Desa Parangtritis, Kecamatan Kretek, Kabupaten Bantul, Provinsi Daerah Istimewa Yogyakarta, Indonesia.";
+      arrTempatWisata = ["Pantai Parangtritis"];
+      break;
+    case "Pantai Sundak":
+      location =
+        "Desa Sidoharjo, Kecamatan Tepus, Kabupaten Gunung Kidul, Provinsi Daerah Istimewa Yogyakarta, Indonesia.";
+      arrTempatWisata = ["Pantai Sundak"];
+      break;
+    case "Pantai Timang":
+      location =
+        "Desa Duwet, Kecamatan Tepus, Kabupaten Gunung Kidul, Provinsi Daerah Istimewa Yogyakarta, Indonesia.";
+      arrTempatWisata = ["Pantai Timang"];
+      break;
+    case "Pantai Glagah Indah":
+      location =
+        "Desa Glagah, Kecamatan Temon, Kabupaten Kulon Progo, Provinsi Daerah Istimewa Yogyakarta, Indonesia.";
+      arrTempatWisata = ["Pantai Glagah Indah"];
+      break;
+    case "Danau Rawa Pening":
+      location =
+        "Desa Tuntang, Kecamatan Tuntang, Kabupaten Semarang, Provinsi Jawa Tengah, Indonesia.";
+      arrTempatWisata = ["Danau Rawa Pening"];
+      break;
+    case "Benteng Fort de Kock":
+      location =
+        "Jalan Juanda, Kecamatan Bukittinggi, Kota Bukittinggi, Provinsi Sumatera Barat, Indonesia.";
+      arrTempatWisata = ["Benteng Fort de Kock"];
+      break;
+    case "Istana Siak":
+      location =
+        "Jalan Sultan Syarif Kasim, Kecamatan Siak, Kabupaten Siak, Provinsi Riau, Indonesia.";
+      arrTempatWisata = ["Istana Siak"];
+      break;
+    case "Makam Juang Mandor":
+      location =
+        "Desa Mandor, Kecamatan Mandor, Kabupaten Landak, Provinsi Kalimantan Barat, Indonesia.";
+      arrTempatWisata = ["Makam Juang Mandor"];
+      break;
+    case "Jembatan Barelang":
+      location =
+        "Jembatan Barelang, Kecamatan Sagulung, Kota Batam, Provinsi Kepulauan Riau, Indonesia.";
+      arrTempatWisata = ["Jembatan Barelang"];
+      break;
+    case "Jam Gadang Bukittinggi":
+      location =
+        "Jalan Soekarno Hatta, Kecamatan Bukittinggi, Kota Bukittinggi, Provinsi Sumatera Barat, Indonesia.";
+      arrTempatWisata = ["Jam Gadang Bukittinggi"];
+      break;
+    case "Bukit Cendana":
+      location =
+        "Desa Cendana, Kecamatan Cendana, Kabupaten Aceh Tengah, Provinsi Aceh, Indonesia.";
+      arrTempatWisata = ["Bukit Cendana"];
+      break;
+    case "Pulau Sempu":
+      location =
+        "Desa Tambakrejo, Kecamatan Sumbermanjing Wetan, Kabupaten Malang, Provinsi Jawa Timur, Indonesia.";
+      arrTempatWisata = ["Pulau Sempu"];
+      break;
+    case "Pulau Timang":
+      location =
+        "Desa Sidoharjo, Kecamatan Tepus, Kabupaten Gunungkidul, Provinsi Daerah Istimewa Yogyakarta, Indonesia.";
+      arrTempatWisata = ["Pulau Timang"];
+      break;
     default:
       arrTempatWisata = [];
       break;
   }
 
   try {
-    const data = await getDataSimilar(arrTempatWisata);
+    const data = await getDataSimilar(arrTempatWisata, location);
     return NextResponse.json(
       { status: 200, message: "Success", data },
       { status: 200 }

@@ -16,6 +16,7 @@ import {
   BreadcrumbLink,
   BreadcrumbList,
 } from "@/components/ui/breadcrumb";
+import { string } from "zod";
 
 // Tipe data untuk destinasi
 type Destination = {
@@ -43,6 +44,129 @@ const dpspDestinations: Destination[] = [
   { name: "Labuan Bajo", image: "/labuanbajo.jpg" },
 ];
 
+const borobudurComparison: Destination[] = [
+  { name: "Candi Prambanan", image: "/prambanan.jpg" },
+  { name: "Candi Ratu Boko", image: "/ratuboko.jpg" },
+  { name: "Candi Gedong Songo", image: "/gedongsongo.jpg" },
+  { name: "Candi Ijo", image: "/ijo.jpg" },
+  { name: "Candi Sambisari", image: "/sambisari.jpg" },
+  { name: "Candi Plaosan", image: "/plaosan.jpg" },
+  { name: "Candi Arjuna", image: "/arjuna.jpg" },
+  { name: "Candi Sewu", image: "/sewu.jpg" },
+  { name: "Candi Pawon", image: "/pawon.jpg" },
+  { name: "Candi Kalasan", image: "/kalasan.jpg" },
+];
+
+const borobudurNames = [
+  "Borobudur",
+  "Candi Prambanan",
+  "Candi Ratu Boko",
+  "Candi Gedong Songo",
+  "Candi Ijo",
+  "Candi Sambisari",
+  "Candi Plaosan",
+  "Candi Arjuna",
+  "Candi Sewu",
+  "Candi Pawon",
+  "Candi Kalasan",
+];
+
+const mandalikaComparison: Destination[] = [
+  { name: "Jatiluwih Warisan Budaya Dunia", image: "/jatiluwih.jpg" },
+  { name: "Upside Down World", image: "/upsidedown.jpg" },
+  { name: "Beachwalk XXI Cineplex Bali", image: "/beachwalk.jpg" },
+  { name: "Trekking Rinjani Lombok", image: "/rinjani.jpg" },
+  { name: "Rinjani Trekking Farm", image: "/farm.jpg" },
+  { name: "Galeri Positive Negative Visual", image: "/galeri.jpg" },
+];
+
+const mandalikaNames = [
+  "Mandalika",
+  "Jatiluwih Warisan Budaya Dunia",
+  "Upside Down World",
+  "Beachwalk XXI Cineplex Bali",
+  "Trekking Rinjani Lombok",
+  "Rinjani Trekking Farm",
+  "Galeri Positive Negative Visual",
+];
+
+const likupangComparison: Destination[] = [
+  { name: "Pampang Cultural Park", image: "/pampang.jpg" },
+  { name: "Istana Kesultanan Gunung Tabur", image: "/istana.jpg" },
+  { name: "Museum Kesultanan Ternate", image: "/museum.jpg" },
+  { name: "Pantai Klayar", image: "/klayar.jpg" },
+  { name: "Pantai Panjang", image: "/panjang.jpg" },
+  { name: "Pantai Kukup", image: "/kukup.jpg" },
+  { name: "Pantai Parangtritis", image: "/parangtritis.jpg" },
+  { name: "Pantai Sundak", image: "/sundak.jpg" },
+  { name: "Pantai Timang", image: "/timang.jpg" },
+  { name: "Pantai Glagah Indah", image: "/glagah.jpg" },
+];
+
+const likupangNames = [
+  "Likupang",
+  "Pampang Cultural Park",
+  "Istana Kesultanan Gunung Tabur",
+  "Museum Kesultanan Ternate",
+  "Pantai Klayar",
+  "Pantai Panjang",
+  "Pantai Kukup",
+  "Pantai Parangtritis",
+  "Pantai Sundak",
+  "Pantai Timang",
+  "Pantai Glagah Indah",
+];
+
+const danautobaComparison: Destination[] = [
+  { name: "Danau Rawa Pening", image: "/rawapening.jpg" },
+  { name: "Pantai Panjang", image: "/panjang.jpg" },
+  { name: "Benteng Fort de Kock", image: "/fort.jpg" },
+  { name: "Istana Siak", image: "/siak.jpg" },
+  { name: "Makam Juang Mandor", image: "/mandor.jpg" },
+  { name: "Jembatan Barelang", image: "/barelang.jpg" },
+  { name: "Jam Gadang Bukittinggi", image: "/gadang.jpg" },
+  { name: "Bukit Cendana", image: "/cendana.jpg" },
+];
+
+const danautobaNames = [
+  "Danau Toba",
+  "Danau Rawa Pening",
+  "Pantai Panjang",
+  "Benteng Fort de Kock",
+  "Istana Siak",
+  "Makam Juang Mandor",
+  "Jembatan Barelang",
+  "Jam Gadang Bukittinggi",
+  "Bukit Cendana",
+];
+
+const labuanbajoComparison: Destination[] = [
+  { name: "Pulau Sempu", image: "/sempu.jpg" },
+  { name: "Pulau Timang", image: "/timang.jpg" },
+  { name: "Pantai Klayar", image: "/klayar.jpg" },
+  { name: "Pantai Panjang", image: "/panjang.jpg" },
+  { name: "Pantai Kukup", image: "/kukup.jpg" },
+  { name: "Pantai Parangtritis", image: "/parangtritis.jpg" },
+  { name: "Pantai Sundak", image: "/sundak.jpg" },
+  { name: "Pantai Timang", image: "/timang.jpg" },
+  { name: "Pantai Glagah Indah", image: "/glagah.jpg" },
+];
+
+const labuanbajoNames = [
+  "Labuan Bajo",
+  "Pulau Sempu",
+  "Pulau Timang",
+  "Pantai Klayar",
+  "Pantai Panjang",
+  "Pantai Kukup",
+  "Pantai Parangtritis",
+  "Pantai Sundak",
+  "Pantai Timang",
+  "Pantai Glagah Indah",
+];
+
+let options: Destination[] = dpspDestinations;
+
 // Komponen untuk menampilkan detail destinasi
 const DestinationDetails = ({
   name,
@@ -62,7 +186,21 @@ const DestinationDetails = ({
       );
       const data = await response.json();
       setDetails(data.data);
+      if (borobudurNames.includes(name)) {
+        options = borobudurComparison;
+      } else if (mandalikaNames.includes(name)) {
+        options = mandalikaComparison;
+      } else if (likupangNames.includes(name)) {
+        options = likupangComparison;
+      } else if (danautobaNames.includes(name)) {
+        options = danautobaComparison;
+      } else if (labuanbajoNames.includes(name)) {
+        options = labuanbajoComparison;
+      } else {
+        options = dpspDestinations;
+      }
     };
+
     fetchDetails();
   }, [name]);
 
@@ -122,6 +260,9 @@ export default function CompetitorPage() {
   // Menghapus destinasi dari daftar
   const handleRemoveDestination = (indexToRemove: number) => {
     setDestinations(destinations.filter((_, index) => index !== indexToRemove));
+    if (indexToRemove === 0) {
+      options = dpspDestinations;
+    }
   };
 
   // Membuka popup pencarian
@@ -130,7 +271,7 @@ export default function CompetitorPage() {
   };
 
   // Mencari destinasi yang cocok berdasarkan input pencarian
-  const filteredDestinations = dpspDestinations.filter((dest) =>
+  const filteredDestinations = options.filter((dest) =>
     dest.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 

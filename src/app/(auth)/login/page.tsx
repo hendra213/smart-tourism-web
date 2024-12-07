@@ -1,11 +1,16 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
 const SignInPage: React.FC = ({ searchParams }: any) => {
+  const router = useRouter();
+  const handleBackClick = () => {
+    router.back();
+  };
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [status, setStatus] = useState<string | null>(null);
@@ -188,10 +193,18 @@ const SignInPage: React.FC = ({ searchParams }: any) => {
               <button
                 disabled={isLoading}
                 type="submit"
-                className="w-full rounded-md mb-2 h-12 bg-blue-800 text-white py-1 px-4 hover:bg-blue-800"
+                className="w-full rounded-md mb-2 h-12 bg-orange-500 text-white py-1 px-4 hover:bg-orange-600 font-bold"
               >
                 {isLoading ? "Loading..." : "Masuk"}
               </button>
+            </div>
+            <div className="flex justify-center">
+              <Button
+                onClick={handleBackClick}
+                className=" bg-orange-500 text-white hover:bg-orange-600 w-[30%]"
+              >
+                &larr; Kembali
+              </Button>
             </div>
           </form>
         </div>

@@ -6,7 +6,10 @@ type AverageRatingResult = {
   };
 };
 
-export const getDataSimilar = async (tempatWisata: string[]) => {
+export const getDataSimilar = async (
+  tempatWisata: string[],
+  location: string
+) => {
   try {
     const queries = [
       // query average rating
@@ -63,8 +66,7 @@ export const getDataSimilar = async (tempatWisata: string[]) => {
       reviews: totalReviews,
       popularity: positivePercentage,
       overallRating: positifReviews,
-      location:
-        "Jalan Borobudur, Kecamatan Borobudur, Kabupaten Magelang, Jawa Tengah, Indonesia.",
+      location,
     };
   } catch (error) {
     console.error("Error fetching data:", error);
