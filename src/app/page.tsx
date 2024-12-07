@@ -4,28 +4,70 @@ import { signIn } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState, useEffect } from "react";
-
-<!-- import { AiFillWechat } from "react-icons/ai";
+import { AiFillWechat } from "react-icons/ai";
 import { FaBars, FaTimes } from "react-icons/fa"; // Import icons for hamburger menu
 import { ChartKeramaian } from "@/components/dashboard/barcharts-deteksi-keramaian";
 import DestinationCard from "@/components/maps/card-destination";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { DialogCamera } from "@/components/dashboard/pop-up-camera";
 import { DialogWisata } from "@/components/dashboard/pop-up-submit";
-import { VisitorData } from "@/components/dashboard/barcharts-deteksi-keramaian"; -->
+import { VisitorData } from "@/components/dashboard/barcharts-deteksi-keramaian";
+import ChatBot from "@/components/dashboard/chatbot";
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+// import image from "next/image"; // Removed duplicate import
 
 // Data destinasi
-
-=======
+const CardDescription = [
+  {
+    rank: 1,
+    title: "Danau Toba",
+    location: "Sumatera Utara",
+    lat: 2.6845,
+    lng: 98.8588,
+    imageUrl: "/images/danautoba.jpg",
+  },
+  {
+    rank: 2,
+    title: "Candi Borobudur",
+    location: "Jawa Tengah",
+    lat: -7.6079,
+    lng: 110.2038,
+    imageUrl: "/images/borobudur.jpg",
+  },
+  {
+    rank: 3,
+    title: "Likupang",
+    location: "Sulawesi Utara",
+    lat: 1.6824,
+    lng: 125.0568,
+    imageUrl: "/images/likupang.jpg",
+  },
+  {
+    rank: 4,
+    title: "Mandalika",
+    location: "Nusa Tenggara Barat",
+    lat: -8.8955,
+    lng: 116.2951,
+    imageUrl: "/images/mandalika.jpg",
+  },
+  {
+    rank: 5,
+    title: "Labuan Bajo",
+    location: "Nusa Tenggara Timur",
+    lat: -8.4539,
+    lng: 119.889,
+    imageUrl: "/images/labuanbajo.jpg",
+  },
+];
 
 
 // Data gambar destinasi
 const destinations = [
   { name: "Likupang", image: "/images/Likupang.jpg" },
   { name: "Mandalika", image: "/images/Mandalika.jpg" },
-  { name: "Borobudur", image: "/images/Candi%20Borobudur.jpg" },
-  { name: "Labuan Bajo", image: "/images/Labuan%20Bajo.jpg" },
-  { name: "Danau Toba", image: "/images/Danau%20Toba.jpg" },
+  { name: "Borobudur", image: "/images/borobudur.jpg" },
+  { name: "Labuan Bajo", image: "/images/labuanbajo.jpg" },
+  { name: "Danau Toba", image: "/images/danautoba.jpg" },
 ];
 
 export default function Home() {
@@ -33,6 +75,7 @@ export default function Home() {
   const [fade, setFade] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false); // State to control hamburger menu
+  const [selectedDestination, setSelectedDestination] = useState<string | null>(null); // State to track selected destination
 
   // Mengatur transisi gambar dengan interval waktu
   useEffect(() => {
@@ -101,6 +144,18 @@ export default function Home() {
         "Pada halaman ini, pengguna akan melihat grafik yang menunjukkan tren penilaian dari waktu ke waktu untuk masing-masing destinasi. Grafik ini memberikan gambaran visual tentang bagaimana tingkat kepuasan wisatawan berubah, serta memudahkan identifikasi pola atau fluktuasi dalam penilaian. Pengguna dapat menganalisis data ini untuk memahami periode puncak atau penurunan rating, sehingga dapat mengambil langkah-langkah strategis untuk meningkatkan pengalaman wisatawan.",
     },
   ];
+
+   // image preview
+   // State mendukung tipe string (URL) atau null
+   const [image, setImage] = useState<string | null>(null);
+
+   // Tipe parameter eksplisit pada event
+   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+     const file = e.target.files?.[0]; // Cek jika file dipilih
+     if (file) {
+       setImage(URL.createObjectURL(file)); // Buat URL pratinjau
+     }
+   };
 
   return (
     <div className="font-poppins text-gray-900 relative">
