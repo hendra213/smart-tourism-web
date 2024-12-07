@@ -4,26 +4,28 @@ import { signIn } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState, useEffect } from "react";
-import { FaBars, FaTimes } from "react-icons/fa";
 
-import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import ChatBot from "@/components/dashboard/chatbot";
+<!-- import { AiFillWechat } from "react-icons/ai";
+import { FaBars, FaTimes } from "react-icons/fa"; // Import icons for hamburger menu
+import { ChartKeramaian } from "@/components/dashboard/barcharts-deteksi-keramaian";
+import DestinationCard from "@/components/maps/card-destination";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { DialogCamera } from "@/components/dashboard/pop-up-camera";
+import { DialogWisata } from "@/components/dashboard/pop-up-submit";
+import { VisitorData } from "@/components/dashboard/barcharts-deteksi-keramaian"; -->
+
+// Data destinasi
+
+=======
+
 
 // Data gambar destinasi
 const destinations = [
-  { name: "Likupang", image: "/images/likupang.jpg" },
-  { name: "Mandalika", image: "/images/mandalika.jpg" },
-  { name: "Borobudur", image: "/images/borobudur.jpg" },
-  { name: "Labuan Bajo", image: "/images/labuanbajo.jpg" },
-  { name: "Danau Toba", image: "/images/danautoba.jpg" },
+  { name: "Likupang", image: "/images/Likupang.jpg" },
+  { name: "Mandalika", image: "/images/Mandalika.jpg" },
+  { name: "Borobudur", image: "/images/Candi%20Borobudur.jpg" },
+  { name: "Labuan Bajo", image: "/images/Labuan%20Bajo.jpg" },
+  { name: "Danau Toba", image: "/images/Danau%20Toba.jpg" },
 ];
 
 export default function Home() {
@@ -65,6 +67,7 @@ export default function Home() {
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
+
 
   // Bagian Popup Fitur Unggulan
   const [activeFeature, setActiveFeature] = useState<number | null>(null);
@@ -407,6 +410,120 @@ export default function Home() {
           ))}
         </div>
       </section>
+
+      {/* Deteksi Objek Wisata Section */}
+      <section className="py-8 bg-gradient-to-tr from-[#FE7123] to-[#F6D45E] text-white relative">
+        <div className="absolute inset-0">
+          <Image
+            src="/herosection-pattern.png"
+            alt="Pattern Background"
+            layout="fill"
+            objectFit="cover"
+            className="opacity-50"
+          />
+        </div>
+        <div className="relative text-center mx-auto max-w-2xl ">
+          <h1 className="text-2xl font-semibold mb-6 lg:text-4xl md:text-4xl sm:text-4xl">
+            DETEKSI OBJEK WISATA
+          </h1>
+          <div className="flex justify-cente flex-col">
+            <p className="max-w-2xl mb-1 text-center">
+              Temukan Objek Wisata Impian Anda
+            </p>
+            <p className="max-w-2xl mb-6 text-center">
+              Hanya Menggunakan Foto Saja.
+            </p>
+          </div>
+
+          {/* Tombol tambah destinasi */}
+          <div className="flex justify-center items-center">
+      {/* Kontainer untuk memposisikan div ke tengah */}
+      <div className="border-2 border-dashed border-gray-600 bg-white rounded-lg p-6 flex flex-col items-center justify-center cursor-pointer text-gray-500 hover:bg-gray-50 h-[400px] w-[300px] max-w-[300px] relative">
+        <input
+          id="picture"
+          type="file"
+          className="opacity-0 absolute inset-0 cursor-pointer"
+          onChange={handleImageChange} // Ketika input berubah, tangani file
+        />
+
+        {/* Jika ada gambar, tampilkan preview */}
+        {image ? (
+          <img
+            src={image}
+            alt="Preview"
+            className="object-contain h-full w-full rounded-lg"
+          />
+        ) : (
+          <>
+            <div className="text-3xl">+</div>
+            <p>Upload Image Wisata</p>
+          </>
+        )}
+      </div>
+    </div>
+          <div className="flex justify-center mt-10 gap-8">
+            <DialogCamera></DialogCamera>
+            {/* <button
+              className="text-[#FE7123] rounded-md text-xs ring-offset-background 
+  transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring 
+  focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-secondary 
+  text-secondary-foreground h-8 px-3 py-1 border-2 border-orange-200 hover:bg-orange-100 
+  sm:h-10 sm:w-28 lg:h-10 lg:w-32 lg:text-sm z-10  
+  font-bold shadow-md shadow-black-400 hover:text-blue bg-white"
+            >
+              Camera
+            </button> */}
+
+            <DialogWisata></DialogWisata>
+            {/* <Link href="/deteksi-wisata">
+            <button
+              className="text-[#FE7123] rounded-md text-xs ring-offset-background 
+  transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring 
+  focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-secondary 
+  text-secondary-foreground h-8 px-3 py-1 border-2 border-orange-200 hover:bg-orange-100 
+  sm:h-10 sm:w-28 lg:h-10 lg:w-32 lg:text-sm z-10   
+  font-bold shadow-md shadow-black-400 hover:text-blue bg-white"
+            >
+              Submit
+            </button>
+            </Link> */}
+          </div>
+        </div>
+      </section>
+
+      {/* Deteksi Keramaian Pengunjung Section */}
+      <section className="text-center bg-white py-16" id="destinasi">
+      <h2 className="text-4xl uppercase font-bold mb-6 bg-gradient-to-r from-[#FE7123] to-[#F6D45E] bg-clip-text text-transparent transition-all duration-300 hover:bg-gradient-to-l hover:from-[#F6D45E] hover:to-[#FE7123]">
+        Deteksi Keramaian Pengunjung
+      </h2>
+
+      <div className="flex justify-center gap-8 w-full px-10 mt-10">
+        {/* Chart Keramaian */}
+        <div className="flex-1 w-full lg:w-1/2">
+          <ChartKeramaian selectedDestination={selectedDestination} />
+        </div>
+
+        {/* Daftar Destinasi */}
+        <div className="flex-1 w-full lg:w-1/2">
+          <ScrollArea>
+            <div className="space-y-2">
+              {CardDescription.map((destination) => (
+                <DestinationCard
+                  key={destination.rank}
+                  rank={destination.rank}
+                  title={destination.title}
+                  location={destination.location}
+                  imageUrl={destination.imageUrl}
+                  onClick={() => setSelectedDestination(destination.title)} // Perbarui state
+                />
+              ))}
+            </div>
+            <ScrollBar orientation="vertical" className="cursor-pointer" />
+          </ScrollArea>
+        </div>
+      </div>
+      
+    </section>
 
       {/* Kata - Kata */}
       <section className="bg-gradient-to-tr from-[#FE7123] to-[#F6D45E] text-white text-center py-32">

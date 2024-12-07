@@ -31,7 +31,29 @@ model sentiments {
   label         String   @db.VarChar(10)
   score         String   @db.VarChar(30)
   bahasa        String   @db.VarChar(10)
-  source        String   @db.VarChar(25)
   tokenized     String   @db.Text
   date          DateTime @db.Date
+}
+
+model sentiments_ato {
+  id            Int      @id @default(autoincrement())
+  tempat_wisata String   @db.VarChar(50)
+  id_review     String   @db.VarChar(75)
+  komentar      String   @db.Text
+  rating        Int
+  label         String   @db.VarChar(10)
+  bahasa        String   @db.VarChar(10)
+  tokenized     String   @db.Text
+  date          DateTime @db.DateTime(0)
+}
+
+model visitors {
+  id                  Int      @id @default(autoincrement())
+  nama_wisata         String?  @db.VarChar(255)
+  tanggal             DateTime @db.Date
+  pengunjung_masuk    Int?
+  pengunjung_keluar   Int?
+  pengunjung_di_dalam Int?
+  suhu                Decimal? @db.Decimal(11, 2)
+  kelembapan          Decimal? @db.Decimal(11, 2)
 }
